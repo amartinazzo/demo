@@ -1,6 +1,7 @@
-from demo.main import app
 from fastapi.testclient import TestClient
 import pytest
+
+from demo.main import app
 
 client = TestClient(app)
 
@@ -16,8 +17,8 @@ def test_root_endpoint():
         ])
 def test_model_endpoint_with_correct_payload(payload):
     response = client.post("/model", json=payload)
-    assert response.status_code == 200
     data = response.json()
+    assert response.status_code == 200
     assert "generated_text" in data.keys()
     assert payload["text"] in data["generated_text"]
 
