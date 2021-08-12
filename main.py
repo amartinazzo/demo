@@ -18,19 +18,35 @@ model = AutoModelForCausalLM.from_pretrained("model")
 pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer)
 
 # API
-app = FastAPI(title="MyModelApp", version="0.0.1")
+app = FastAPI(
+    title="MyModelApp",
+    version="0.0.1",
+    description="""
+This is my model API!
+
+## What it does
+
+It generates text in Portuguese.
+"""
+)
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-@app.get("/")
-async def root():
+@app.get("/", tags=["home"])
+async def home():
+    """
+    my docstring
+    """
     return {"message": "This is my model API."}
 
-@app.post("/mymodel")
+@app.post("/model", tags=["model"])
 async def generate_text(inpt: ModelInput):
+    """
+    my other docstring
+    """
     t0 = time.perf_counter()
-    response = pipe(inpt.text)
+    response = pipe(inpt.text)[0]
     time_elapsed = time.perf_counter() - t0
     logging.info("Model input: " + inpt.text)
-    logging.info("Model output: " + response[0]["generated_text"])
+    logging.info("Model output: " + response["generated_text"])
     logging.info("Time elapsed: " + str(round(time_elapsed, 4)) + " s")
     return response
