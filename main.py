@@ -7,14 +7,16 @@ from pydantic import BaseModel
 from pydantic.typing import Optional
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
+import config
+
 # pydantic model
 class ModelInput(BaseModel):
     user_id: Optional[int]
     text: str
 
 # ML model
-tokenizer = AutoTokenizer.from_pretrained("pierreguillou/gpt2-small-portuguese")
-model = AutoModelForCausalLM.from_pretrained("model")
+tokenizer = AutoTokenizer.from_pretrained(config.PRETRAINED_MODEL)
+model = AutoModelForCausalLM.from_pretrained(config.MODEL_PATH)
 pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer)
 
 # API

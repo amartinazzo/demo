@@ -37,10 +37,10 @@ def test_model_endpoint_receives_incorrect_payload(payload):
     "payload", [
         {"text": "eu gosto de"}
         ])
-def test_model_endpoint_returns_under_1s(payload):
+def test_model_endpoint_returns_under_3s(payload):
     time_elapsed = []
     for _ in range(10):
         t0 = time.perf_counter()
         _ = client.post("/model", json=payload)
         time_elapsed.append(time.perf_counter() - t0)
-    assert mean(time_elapsed) < 1
+    assert mean(time_elapsed) < 3
